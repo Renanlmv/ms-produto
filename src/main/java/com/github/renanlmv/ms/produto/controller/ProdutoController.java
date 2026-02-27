@@ -1,12 +1,9 @@
 package com.github.renanlmv.ms.produto.controller;
 
 import com.github.renanlmv.ms.produto.dto.ProdutoDTO;
-import com.github.renanlmv.ms.produto.dto.ProdutoInputDTO;
-import com.github.renanlmv.ms.produto.dto.ProdutoResponseDTO;
 import com.github.renanlmv.ms.produto.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
