@@ -64,6 +64,17 @@ public class GlobalExceptionHandler {
         CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(),
                 "Requisição inválida (parâmetro com tipo/formato incorreto).",
                 request.getRequestURI());
-        return  ResponseEntity.status(status).body(err);
+        return ResponseEntity.status(status).body(err);
+    }
+
+    // 500 - fallback para qualquer erro não tratado
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CustomErrorDTO> handleGenericException(Exception e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        CustomErrorDTO err = new CustomErrorDTO(
+                Instant.now(), status.value(), "Erro interno inesperado.", request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(err);
     }
 }
