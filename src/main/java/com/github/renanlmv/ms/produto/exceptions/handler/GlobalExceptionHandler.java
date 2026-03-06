@@ -1,5 +1,6 @@
 package com.github.renanlmv.ms.produto.exceptions.handler;
 
+import com.github.renanlmv.ms.produto.exceptions.DatabaseException;
 import com.github.renanlmv.ms.produto.exceptions.ResourceNotFoundException;
 import com.github.renanlmv.ms.produto.exceptions.dto.CustomErrorDTO;
 import com.github.renanlmv.ms.produto.exceptions.dto.ValidationErrorDTO;
@@ -67,14 +68,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<CustomErrorDTO> handleDatabase (DatabaseException e,
+                                                          HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT; // erro 409
+        CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(),
+                e.getMessage(),  request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
+
     // 500 - fallback para qualquer erro não tratado
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomErrorDTO> handleGenericException(Exception e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // erro 500
         CustomErrorDTO err = new CustomErrorDTO(
                 Instant.now(), status.value(), "Erro interno inesperado.", request.getRequestURI()
         );
 
         return ResponseEntity.status(status).body(err);
     }
+
+
 }
