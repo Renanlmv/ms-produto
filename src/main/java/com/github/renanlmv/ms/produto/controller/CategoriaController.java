@@ -1,9 +1,9 @@
 package com.github.renanlmv.ms.produto.controller;
 
-import com.github.renanlmv.ms.produto.dto.CategoriaDTO;
+import com.github.renanlmv.ms.produto.dto.CategoriaRequestDTO;
+import com.github.renanlmv.ms.produto.dto.CategoriaResponseDTO;
 import com.github.renanlmv.ms.produto.service.CategoriaService;
 import jakarta.validation.Valid;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +20,22 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> getAllCategorias() {
-        List<CategoriaDTO> categorias = categoriaService.findAllCategories();
+    public ResponseEntity<List<CategoriaResponseDTO>> getAllCategorias() {
+        List<CategoriaResponseDTO> categorias = categoriaService.findAllCategories();
         return ResponseEntity.ok(categorias);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> getCategoriaById(@PathVariable Long id) {
+    public ResponseEntity<CategoriaResponseDTO> getCategoriaById(@PathVariable Long id) {
 
-        CategoriaDTO categoriaDTO = categoriaService.findCategoriaById(id);
+        CategoriaResponseDTO categoriaDTO = categoriaService.findCategoriaById(id);
         return ResponseEntity.ok(categoriaDTO);
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> createCategoria(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+    public ResponseEntity<CategoriaResponseDTO> createCategoria(@Valid @RequestBody CategoriaRequestDTO inputDTO) {
 
-        categoriaDTO = categoriaService.saveCategoria(categoriaDTO);
+       CategoriaResponseDTO categoriaDTO = categoriaService.saveCategoria(inputDTO);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -47,10 +47,10 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> updateCategoria(@PathVariable Long id,
-                                                        @RequestBody @Valid CategoriaDTO categoriaDTO) {
+    public ResponseEntity<CategoriaResponseDTO> updateCategoria(@PathVariable Long id,
+                                                                @RequestBody @Valid CategoriaRequestDTO inputDTO) {
 
-        categoriaDTO = categoriaService.updateCategoria(id, categoriaDTO);
+        CategoriaResponseDTO categoriaDTO = categoriaService.updateCategoria(id, inputDTO);
         return ResponseEntity.ok(categoriaDTO);
     }
 

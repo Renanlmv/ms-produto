@@ -1,6 +1,7 @@
 package com.github.renanlmv.ms.produto.dto;
 
 import com.github.renanlmv.ms.produto.entities.Produto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -8,17 +9,17 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ProdutoDTO {
-
-    private Long id;
+@Setter
+public class ProdutoRequestDTO {
 
     @NotBlank(message = "Campo nome é requerido")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
+    @Schema(example = "Produto exemplo")
     private String nome;
 
     @NotBlank(message = "Campo descrição é requerido")
@@ -30,13 +31,12 @@ public class ProdutoDTO {
     private Double valor;
 
     @NotNull(message = "Campo categoria é requerido")
-    private CategoriaDTO categoria;
+    private Long categoriaId;
 
-    public ProdutoDTO(Produto produto) {
-        id = produto.getId();
+    public ProdutoRequestDTO(Produto produto) {
         nome = produto.getNome();
         descricao = produto.getDescricao();
         valor = produto.getValor();
-        categoria = new CategoriaDTO(produto.getCategoria());
+        categoriaId = produto.getCategoria().getId();
     }
 }

@@ -1,6 +1,7 @@
 package com.github.renanlmv.ms.produto.service;
 
-import com.github.renanlmv.ms.produto.dto.CategoriaDTO;
+import com.github.renanlmv.ms.produto.dto.CategoriaRequestDTO;
+import com.github.renanlmv.ms.produto.dto.CategoriaResponseDTO;
 import com.github.renanlmv.ms.produto.entities.Categoria;
 import com.github.renanlmv.ms.produto.exceptions.DatabaseException;
 import com.github.renanlmv.ms.produto.exceptions.ResourceNotFoundException;
@@ -21,44 +22,44 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoriaDTO> findAllCategories () {
-        return categoriaRepository.findAll().stream().map(CategoriaDTO::new).toList();
+    public List<CategoriaResponseDTO> findAllCategories () {
+        return categoriaRepository.findAll().stream().map(CategoriaResponseDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
-    public CategoriaDTO findCategoriaById(Long id) {
+    public CategoriaResponseDTO findCategoriaById(Long id) {
 
         Categoria categoria = categoriaRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Recurso não encontrado. ID: " + id)
         );
 
-        return new CategoriaDTO(categoria);
+        return new CategoriaResponseDTO(categoria);
     }
 
     @Transactional
-    public CategoriaDTO saveCategoria(CategoriaDTO categoriaDTO) {
+    public CategoriaResponseDTO saveCategoria(CategoriaRequestDTO inputDTO) {
         Categoria categoria = new Categoria();
-        copyDtoToCategoria(categoriaDTO, categoria);
+        copyDtoToCategoria(inputDTO, categoria);
 
         // salva a entidade no banco e retorna a versão atualizada com id gerado pelo banco
         categoria = categoriaRepository.save(categoria);
-        return new CategoriaDTO(categoria);
+        return new CategoriaResponseDTO(categoria);
     }
 
-    public void copyDtoToCategoria(CategoriaDTO categoriaDTO, Categoria categoria) {
+    public void copyDtoToCategoria(CategoriaRequestDTO categoriaDTO, Categoria categoria) {
 
         categoria.setNome(categoriaDTO.getNome());
         categoria.setProdutos(categoria.getProdutos());
     }
 
     @Transactional
-    public CategoriaDTO updateCategoria(Long id, CategoriaDTO categoriaDTO) {
+    public CategoriaResponseDTO updateCategoria(Long id, CategoriaRequestDTO inputDTO) {
 
         try {
             Categoria categoria = categoriaRepository.getReferenceById(id);
-            copyDtoToCategoria(categoriaDTO, categoria);
+            copyDtoToCategoria(inputDTO, categoria);
             categoria = categoriaRepository.save(categoria);
-            return new CategoriaDTO(categoria);
+            return new CategoriaResponseDTO(categoria);
         } catch (EntityNotFoundException ex) {
             throw new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
         }

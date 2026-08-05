@@ -1,24 +1,21 @@
 package com.github.renanlmv.ms.produto.dto;
 
 import com.github.renanlmv.ms.produto.entities.Categoria;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CategoriaDTO {
+@Setter
+public class CategoriaResponseDTO {
 
     private Long id;
-
-    @NotBlank(message = "Campo não pode estar vazio, nulo ou em branco")
-    @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
     private String nome;
 
-    public CategoriaDTO(Categoria categoria) {
+    public CategoriaResponseDTO(Categoria categoria) {
         id = categoria.getId();
         nome = categoria.getNome();
     }
